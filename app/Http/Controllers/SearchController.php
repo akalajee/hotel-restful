@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 
 class SearchController extends BaseController {
 
+	protected $_client;
+
     const SORT_DIR_ASC = 1;
     const SORT_DIR_DESC = -1;
 
@@ -18,6 +20,11 @@ class SearchController extends BaseController {
         self::SORT_DIR_ASC => 'ASC',
         self::SORT_DIR_DESC => 'DESC',
     ];
+	
+	public function __construct(\GuzzleHttp\Client $client)
+	{
+		$this->_client = $client;
+	}
 
     /**
      *
@@ -117,9 +124,8 @@ class SearchController extends BaseController {
         return true;
     }
 
-    protected function fetchHotels(): array {
-        $client = new Client();
-        $res = $client->get('https://api.myjson.com/bins/tl0bp');
+    protected function fetchHotels(): array {        
+        $res = $this->_client->get('https://api.myjson.com/bins/tl0bp');
         $hotels_string = $res->getBody();
         $hotels_array = \GuzzleHttp\json_decode($hotels_string, true);
         return $hotels_array["hotels"];
