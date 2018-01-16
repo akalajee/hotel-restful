@@ -17,11 +17,11 @@ class SearchTest extends TestCase {
 
     public function setUp() {
         parent::setUp();
-        $this->_testMockResponseJsonArray = require __DIR__ . '\TestMockData.php';
+        $this->_testMockResponseJsonArray = require __DIR__ . DIRECTORY_SEPARATOR .'TestMockData.php';
     }
 
     protected function generateExpectedDataPath($func) {
-        return __DIR__ . '\ExpectedData' . str_replace("test", "", $func) . '.php';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'ExpectedData' . str_replace("test", "", $func) . '.php';
     }
 
     protected function generateTest($func) {
