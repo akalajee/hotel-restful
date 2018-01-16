@@ -157,6 +157,39 @@ class SearchController extends BaseController {
         return $this->mergeSort($hotels, $actual_sort_key, $sort_dir);
     }
 
+    private function matchHotelPrice($hotel_value, $search_price): bool {
+        $match_price = true;
+        if (!empty($search_price) && strpos($search_price, ":") !== false) {
+            $price_range_array = explode(":", $search_price);
+            $min_search_price = substr($price_range_array[0], 1); // remove the currency sign ($)
+            $max_search_price = substr($price_range_array[1], 1); // remove the currency sign ($)
+            $match_price = ($hotel_value["price"] >= $min_search_price && $hotel_value["price"] <= $max_search_price);
+        }
+        return $match_price;
+    }
+
+    private function matchHotelDate($hotel_value, $search_date): bool {
+        $match_date = true;
+        if (!empty($search_date) && strpos($search_date, ":") !== false) {
+            $match_date = false;
+            $date_range_array = explode(":", $search_date);
+            $search_from_date = strtotime($date_range_array[0]);
+            $search_to_date = strtotime($date_range_array[1]);
+            $availability_array = $hotel_value["availability"];
+            if (is_array($availability_array) && count($availability_array) > 0) {
+                foreach ($availability_array as $availability_row) {
+                    $available_from = strtotime($availability_row["from"]);
+                    $available_to = strtotime($availability_row["to"]);
+                    if ($search_from_date >= $available_from && $search_to_date <= $available_to) {
+                        $match_date = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return $match_date;
+    }
+
     protected function searchHotels(array $hotels_array, array $search_params): array {
         $search_hotel = $search_params["search_hotel"];
         $search_city = $search_params["search_city"];
@@ -165,33 +198,8 @@ class SearchController extends BaseController {
 
         $filtered_hotels = [];
         foreach ($hotels_array as $hotel_value) {
-            $match_price = true;
-            $match_date = true;
-
-            if (!empty($search_price) && strpos($search_price, ":") !== false) {
-                $price_range_array = explode(":", $search_price);
-                $min_search_price = substr($price_range_array[0], 1); // remove the currency sign ($)
-                $max_search_price = substr($price_range_array[1], 1); // remove the currency sign ($)
-                $match_price = ($hotel_value["price"] >= $min_search_price && $hotel_value["price"] <= $max_search_price);
-            }
-
-            if (!empty($search_date) && strpos($search_date, ":") !== false) {
-                $match_date = false;
-                $date_range_array = explode(":", $search_date);
-                $search_from_date = strtotime($date_range_array[0]);
-                $search_to_date = strtotime($date_range_array[1]);
-                $availability_array = $hotel_value["availability"];
-                if (is_array($availability_array) && count($availability_array) > 0) {
-                    foreach ($availability_array as $availability_row) {
-                        $available_from = strtotime($availability_row["from"]);
-                        $available_to = strtotime($availability_row["to"]);
-                        if ($search_from_date >= $available_from && $search_to_date <= $available_to) {
-                            $match_date = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            $match_price = $this->matchHotelPrice($hotel_value, $search_price);
+            $match_date = $this->matchHotelDate($hotel_value, $search_date);
 
             $match_hotel = (empty($search_hotel) || (stripos($hotel_value["name"], $search_hotel) !== false));
             $match_city = (empty($search_city) || (stripos($hotel_value["city"], $search_city) !== false));
