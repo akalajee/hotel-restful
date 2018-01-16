@@ -1,4 +1,5 @@
-# Hotel RESTful [![Build Status](https://travis-ci.org/akalajee/hotel-restful.svg?branch=master)](https://travis-ci.org/akalajee/hotel-restful)
+# Hotel RESTful 
+[![Build Status](https://travis-ci.org/akalajee/hotel-restful.svg?branch=master)](https://travis-ci.org/akalajee/hotel-restful)
 [![Maintainability](https://api.codeclimate.com/v1/badges/171c260f3c7c9ddae906/maintainability)](https://codeclimate.com/github/akalajee/hotel-restful/maintainability)
 
 Hotel RESTful API is a lumen based project, to query remote server API and make filtration and sorting
