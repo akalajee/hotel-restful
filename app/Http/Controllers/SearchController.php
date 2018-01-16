@@ -30,22 +30,20 @@ class SearchController extends BaseController {
      * @return Response
      */
     public function find(string $search_hotel = null, string $search_city = null, string $search_price = null, string $search_date = null, string $sort_key = 'hotel', int $sort_dir = self::SORT_DIR_ASC): array {
-        $params = [
+        $search_params = [
             "search_hotel" => $search_hotel,
             "search_city" => $search_city,
             "search_price" => $search_price,
             "search_date" => $search_date,
+        ];
+        $all_params = [
             "sort_key" => $sort_key,
             "sort_dir" => $sort_dir
-        ];
-        if ($this->validateParameters($params)) {
+                ] + $search_params;
+
+        if ($this->validateParameters($all_params)) {
             $hotels_json = $this->fetchHotels();
-            $search_params = [
-                "search_hotel" => $search_hotel,
-                "search_city" => $search_city,
-                "search_price" => $search_price,
-                "search_date" => $search_date,
-            ];
+
             $filtered_hotels = $this->searchHotels($hotels_json, $search_params);
             $sorted_filtered_hotels = $this->sortHotels($filtered_hotels, $sort_key, $sort_dir);
             return $this->prepareResponse($sorted_filtered_hotels);
@@ -173,14 +171,10 @@ class SearchController extends BaseController {
         if (!empty($search_date) && strpos($search_date, ":") !== false) {
             $match_date = false;
             $date_range_array = explode(":", $search_date);
-            $search_from_date = strtotime($date_range_array[0]);
-            $search_to_date = strtotime($date_range_array[1]);
             $availability_array = $hotel_value["availability"];
             if (is_array($availability_array) && count($availability_array) > 0) {
                 foreach ($availability_array as $availability_row) {
-                    $available_from = strtotime($availability_row["from"]);
-                    $available_to = strtotime($availability_row["to"]);
-                    if ($search_from_date >= $available_from && $search_to_date <= $available_to) {
+                    if (strtotime($date_range_array[0]) >= strtotime($availability_row["from"]) && strtotime($date_range_array[1]) <= strtotime($availability_row["to"])) {
                         $match_date = true;
                         break;
                     }
