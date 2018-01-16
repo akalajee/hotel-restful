@@ -6,11 +6,7 @@ Hotel RESTful API is a lumen based project, to query remote API-server provider 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
 ### Prerequisites
-
-What things you need to install the software and how to install them
 
 ```
 PHP >= 7.1
