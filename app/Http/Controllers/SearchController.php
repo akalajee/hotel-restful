@@ -51,27 +51,25 @@ class SearchController extends BaseController {
             return $this->prepareResponse($sorted_filtered_hotels);
         }
     }
-    
-    protected function prepareResponse(array $hotels) : array {
+
+    protected function prepareResponse(array $hotels): array {
         return ["hotels" => $hotels];
     }
 
-    protected function validateParameters($params): bool {
-        $search_hotel = $params["search_hotel"];
-        $search_city = $params["search_city"];
-        $search_price = $params["search_price"];
-        $search_date = $params["search_date"];
-        $sort_key = $params["sort_key"];
-        $sort_dir = $params["sort_dir"];
+    private function validateSearchHotel($search_hotel): void {
         if (!is_null($search_hotel) && !is_string($search_hotel)) {
             throw new \Exception("search_hotel param Error!!");
         }
+    }
+
+    private function validateSearchCity($search_city): void {
         if (!is_null($search_city) && !is_string($search_city)) {
             throw new \Exception("search_city param Error!!");
         }
-        if (!is_null($search_price) && !is_string($search_price)) {
-            throw new \Exception("search_price param Error!!");
-        } elseif (!is_null($search_price)) {
+    }
+
+    private function validateSearchPrice($search_price): void {
+        if (!is_null($search_price)) {
             if (strstr($search_price, ":") === false) {
                 throw new \Exception("search_price param do not contain ':' Error!!");
             }
@@ -79,22 +77,17 @@ class SearchController extends BaseController {
             if (count($price_range_array) < 2) {
                 throw new \Exception("search_price param do not contain upper and lower bound Error!!");
             }
-            if (strstr($price_range_array[0], "$") === false) {
-                throw new \Exception("search_price param - lower bound do not contain '$' Error!!");
+            if (strstr($price_range_array[0], "$") === false || strstr($price_range_array[1], "$") === false) {
+                throw new \Exception("search_price param - lower or upper bound do not contain '$' Error!!");
             }
-            if (!is_numeric(substr($price_range_array[0], 1))) {
-                throw new \Exception("search_price param - lower bound is not valid currency Error!!");
-            }
-            if (strstr($price_range_array[1], "$") === false) {
-                throw new \Exception("search_price param - upper bound do not contain '$' Error!!");
-            }
-            if (!is_numeric(substr($price_range_array[1], 1))) {
-                throw new \Exception("search_price param - upper bound is not valid currency Error!!");
+            if (!is_numeric(substr($price_range_array[0], 1)) || !is_numeric(substr($price_range_array[1], 1))) {
+                throw new \Exception("search_price param - lower or upper bound is not valid currency Error!!");
             }
         }
-        if (!is_null($search_date) && !is_string($search_date)) {
-            throw new \Exception("search_date param Error!!");
-        } elseif (!is_null($search_date)) {
+    }
+
+    private function validateSearchDate($search_date): void {
+        if (!is_null($search_date)) {
             if (strstr($search_date, ":") === false) {
                 throw new \Exception("search_date param do not contain ':' Error!!");
             }
@@ -109,6 +102,9 @@ class SearchController extends BaseController {
                 throw new \Exception("search_date param - upper bound is not valid date");
             }
         }
+    }
+
+    private function validateSortKey($sort_key): void {
         if (!is_null($sort_key) && !is_string($sort_key)) {
             throw new \Exception("sort_key param Error!!");
         } elseif (!is_null($sort_key)) {
@@ -116,6 +112,9 @@ class SearchController extends BaseController {
                 throw new \Exception("sort_key param - invalid sort key option");
             }
         }
+    }
+
+    private function validateSortDir($sort_dir): void {
         if (!empty($sort_dir) && !is_int($sort_dir)) {
             throw new \Exception("sort_dir param Error!!");
         } elseif (!is_null($sort_dir)) {
@@ -123,6 +122,21 @@ class SearchController extends BaseController {
                 throw new \Exception("sort_dir param - invalid sort dir option");
             }
         }
+    }
+
+    protected function validateParameters($params): bool {
+        $search_hotel = $params["search_hotel"];
+        $search_city = $params["search_city"];
+        $search_price = $params["search_price"];
+        $search_date = $params["search_date"];
+        $sort_key = $params["sort_key"];
+        $sort_dir = $params["sort_dir"];
+        $this->validateSearchHotel($search_hotel);
+        $this->validateSearchCity($search_city);
+        $this->validateSearchPrice($search_price);
+        $this->validateSearchDate($search_date);
+        $this->validateSortKey($sort_key);
+        $this->validateSortDir($sort_dir);
         return true;
     }
 
