@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
-use GuzzleHttp\Client;
 
 class SearchController extends BaseController {
 
-	protected $_client;
+    protected $_client;
 
     const SORT_DIR_ASC = 1;
     const SORT_DIR_DESC = -1;
@@ -20,11 +19,10 @@ class SearchController extends BaseController {
         self::SORT_DIR_ASC => 'ASC',
         self::SORT_DIR_DESC => 'DESC',
     ];
-	
-	public function __construct(\GuzzleHttp\Client $client)
-	{
-		$this->_client = $client;
-	}
+
+    public function __construct(\GuzzleHttp\Client $client) {
+        $this->_client = $client;
+    }
 
     /**
      *
@@ -50,8 +48,12 @@ class SearchController extends BaseController {
             ];
             $filtered_hotels = $this->searchHotels($hotels_json, $search_params);
             $sorted_filtered_hotels = $this->sortHotels($filtered_hotels, $sort_key, $sort_dir);
-            return $sorted_filtered_hotels;
+            return $this->prepareResponse($sorted_filtered_hotels);
         }
+    }
+    
+    protected function prepareResponse(array $hotels) : array {
+        return ["hotels" => $hotels];
     }
 
     protected function validateParameters($params): bool {
@@ -124,7 +126,7 @@ class SearchController extends BaseController {
         return true;
     }
 
-    protected function fetchHotels(): array {        
+    protected function fetchHotels(): array {
         $res = $this->_client->get('https://api.myjson.com/bins/tl0bp');
         $hotels_string = $res->getBody();
         $hotels_array = \GuzzleHttp\json_decode($hotels_string, true);
