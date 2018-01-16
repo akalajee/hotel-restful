@@ -45,11 +45,11 @@ After launching the application, the following GET routes are available to query
 5. "/find/search_price/{search_price}/{sort_key}/{sort_dir}" => will filter data based on price range sorted by key ASC or DESC based on sort_dir
 6. "/find/search_date/{search_date}/{sort_key}/{sort_dir}" => will filter data based on availabilty date range sorted by key ASC or DESC based on sort_dir
 
-- Parameters Rule:
--- search_price: '$'lower_bound_amount:'$'upper_bound_amount
--- search_date: lower_bound_date(dd-mm-yyyy):upper_bound_date(dd-mm-yyyy)
--- sort_key: 'hotel' and 'price'
--- sort_dir: 1 for ascending and -1 for descending
+##### Parameters Rule:
+- search_price: '$'lower_bound_amount:'$'upper_bound_amount
+- search_date: lower_bound_date(dd-mm-yyyy):upper_bound_date(dd-mm-yyyy)
+- sort_key: 'hotel' and 'price'
+- sort_dir: 1 for ascending and -1 for descending
 
 ## Running the tests
 
