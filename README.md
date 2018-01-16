@@ -3,6 +3,16 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/171c260f3c7c9ddae906/maintainability)](https://codeclimate.com/github/akalajee/hotel-restful/maintainability)
 
 Hotel RESTful API is a lumen based project, to query remote API-server provider for hotel data, and make filtration and sorting for the hotels based on hotel name, price, city and availability.
+Following points where considered while developing the project
+
+- Fetching the data directly from the URL and not create a JSON file
+- Using PHP >= 7.1 for the development
+- Writing Six Unit tests in PHPUnit, to test all possible routes for the application
+- Implementing travis-CI, and adding the build status badges to the project README file
+- Using codeclimate to estimate the code quality, and adding it's badge to the project README file
+- Not using any database or full text search engines
+- Used merge sort as a sorting algorithm as it performs O(n log n) in both worst and best case scenarios
+
 
 ## Getting Started
 
@@ -41,13 +51,21 @@ After launching the application, the following GET routes are available to query
 5. "/find/search_price/{search_price}/{sort_key}/{sort_dir}" => will filter data based on price range sorted by key ASC or DESC based on sort_dir
 6. "/find/search_date/{search_date}/{sort_key}/{sort_dir}" => will filter data based on availabilty date range sorted by key ASC or DESC based on sort_dir
 
-##### Parameters Rule:
+##### Parameters Rule
 - search_hotel: string
 - search_city: string
 - search_price: '$'+((number) lower_bound_amount):'$'+((number) upper_bound_amount)
 - search_date: lower_bound_date(dd-mm-yyyy):upper_bound_date(dd-mm-yyyy)
 - sort_key: 'hotel' and 'price'
 - sort_dir: 1 for ascending and -1 for descending
+
+##### Examples
+ - 'https://project_url/find',
+ - 'https://project_url/find/hotel/1',
+ - 'https://project_url/find/search_hotel/Con/hotel/1',
+ - 'https://project_url/find/search_price/$80:$100/price/-1',
+ - 'https://project_url/find/search_date/10-10-2020:11-10-2020/hotel/-1',
+ - 'https://project_url/find/search_city/Dubai/hotel/1'
 
 ## Running the tests
 
