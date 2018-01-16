@@ -55,10 +55,11 @@ After launching the application, the following GET routes are available to query
 
 ## Running the tests
 
-To run the tests, please run the following command from the project home
+To run the tests, please run one of the following commands from the project home
 
 ```
-.\vendor\bin\phpunit --testdox OR .\vendor\bin\phpunit
+.\vendor\bin\phpunit --testdox
+.\vendor\bin\phpunit
 ```
 
 ## Built With
