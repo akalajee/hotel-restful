@@ -13,11 +13,13 @@ class SearchTest extends TestCase {
         'testSearchAllSortByHotelAsc' => '/find/hotel/1',
         'testSearchByHotelSortByHotelAsc' => '/find/search_hotel/Con/hotel/1',
         'testSearchByPriceSortByPriceDesc' => '/find/search_price/$80:$100/price/-1',
+        'testSearchByDateSortByHotelDesc' => '/find/search_date/10-10-2020:11-10-2020/hotel/-1',
+        'testSearchByCitySortByHotelAsc' => '/find/search_city/Dubai/hotel/1',
     ];
 
     public function setUp() {
         parent::setUp();
-        $this->_testMockResponseJsonArray = require __DIR__ . DIRECTORY_SEPARATOR .'TestMockData.php';
+        $this->_testMockResponseJsonArray = require __DIR__ . DIRECTORY_SEPARATOR . 'TestMockData.php';
     }
 
     protected function generateExpectedDataPath($func) {
@@ -64,6 +66,14 @@ class SearchTest extends TestCase {
     }
 
     public function testSearchByPriceSortByPriceDesc() {
+        $this->generateTest(__FUNCTION__);
+    }
+
+    public function testSearchByDateSortByHotelDesc() {
+        $this->generateTest(__FUNCTION__);
+    }
+
+    public function testSearchByCitySortByHotelAsc() {
         $this->generateTest(__FUNCTION__);
     }
 
