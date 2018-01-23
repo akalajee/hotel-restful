@@ -46,11 +46,8 @@ class Hotel {
             if (count($price_range_array) < 2) {
                 throw new ParameterException("searchPrice param do not contain upper and lower bound Error!!");
             }
-            if (strstr($price_range_array[0], "$") === false || strstr($price_range_array[1], "$") === false) {
-                throw new ParameterException("searchPrice param - lower or upper bound do not contain '$' Error!!");
-            }
-            if (!is_numeric(substr($price_range_array[0], 1)) || !is_numeric(substr($price_range_array[1], 1))) {
-                throw new ParameterException("searchPrice param - lower or upper bound is not valid currency Error!!");
+            if (strstr($price_range_array[0], "$") === false || strstr($price_range_array[1], "$") === false || !is_numeric(substr($price_range_array[0], 1)) || !is_numeric(substr($price_range_array[1], 1))) {
+                throw new ParameterException("searchPrice param - lower or upper bound do not contain '$' or is not valid currency Error!!");
             }
         }
     }
@@ -61,11 +58,8 @@ class Hotel {
             if (count($date_range_array) < 2) {
                 throw new ParameterException("searchDate param do not contain upper and lower bound Error!!");
             }
-            if (strtotime($date_range_array[0]) === false) {
-                throw new ParameterException("searchDate param - lower bound is not valid date");
-            }
-            if (strtotime($date_range_array[1]) === false) {
-                throw new ParameterException("searchDate param - upper bound is not valid date");
+            if (strtotime($date_range_array[0]) === false || strtotime($date_range_array[1]) === false) {
+                throw new ParameterException("searchDate param - lower or upper bound is not valid date");
             }
         }
     }
