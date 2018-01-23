@@ -42,11 +42,11 @@ class Hotel {
 
     private function validateSearchPrice($searchPrice): void {
         if (!is_null($searchPrice)) {
-            $price_range_array = explode(":", $searchPrice);
-            if (count($price_range_array) < 2) {
+            $priceRangeArray = explode(":", $searchPrice);
+            if (count($priceRangeArray) < 2) {
                 throw new ParameterException("searchPrice param do not contain upper and lower bound Error!!");
             }
-            if (strstr($price_range_array[0], "$") === false || strstr($price_range_array[1], "$") === false || !is_numeric(substr($price_range_array[0], 1)) || !is_numeric(substr($price_range_array[1], 1))) {
+            if (strstr($priceRangeArray[0], "$") === false || strstr($priceRangeArray[1], "$") === false || !is_numeric(substr($priceRangeArray[0], 1)) || !is_numeric(substr($priceRangeArray[1], 1))) {
                 throw new ParameterException("searchPrice param - lower or upper bound do not contain '$' or is not valid currency Error!!");
             }
         }
@@ -54,11 +54,11 @@ class Hotel {
 
     private function validateSearchDate($searchDate): void {
         if (!is_null($searchDate)) {
-            $date_range_array = explode(":", $searchDate);
-            if (count($date_range_array) < 2) {
+            $dateRangeArray = explode(":", $searchDate);
+            if (count($dateRangeArray) < 2) {
                 throw new ParameterException("searchDate param do not contain upper and lower bound Error!!");
             }
-            if (strtotime($date_range_array[0]) === false || strtotime($date_range_array[1]) === false) {
+            if (strtotime($dateRangeArray[0]) === false || strtotime($dateRangeArray[1]) === false) {
                 throw new ParameterException("searchDate param - lower or upper bound is not valid date");
             }
         }
@@ -102,80 +102,80 @@ class Hotel {
 
     public function fetchHotels(): array {
         $res = $this->_client->get('https://api.myjson.com/bins/tl0bp');
-        $hotels_string = $res->getBody();
-        $hotels_array = \GuzzleHttp\json_decode($hotels_string, true);
-        return $hotels_array["hotels"];
+        $hotelsString = $res->getBody();
+        $hotelsArray = \GuzzleHttp\json_decode($hotelsString, true);
+        return $hotelsArray["hotels"];
     }
 
     public function sortHotels(array $hotels, string $sortKey = 'hotel', int $sortDir = self::SORT_DIR_ASC): array {
         if (count($hotels) < 1)
             return [];
-        $actual_sortKey = $sortKey;
+        $actualSortKey = $sortKey;
         if (array_key_exists($sortKey, $this->_sortKeyMap)) {
-            $actual_sortKey = $this->_sortKeyMap[$sortKey];
+            $actualSortKey = $this->_sortKeyMap[$sortKey];
         }
-        return $this->mergeSort($hotels, $actual_sortKey, $sortDir);
+        return $this->mergeSort($hotels, $actualSortKey, $sortDir);
     }
 
-    private function matchHotelPrice($hotel_value, $searchPrice): bool {
-        $match_price = true;
+    private function matchHotelPrice($hotelValue, $searchPrice): bool {
+        $matchPrice = true;
         if (!empty($searchPrice) && strpos($searchPrice, ":") !== false) {
-            $price_range_array = explode(":", $searchPrice);
-            $min_searchPrice = substr($price_range_array[0], 1); // remove the currency sign ($)
-            $max_searchPrice = substr($price_range_array[1], 1); // remove the currency sign ($)
-            $match_price = ($hotel_value["price"] >= $min_searchPrice && $hotel_value["price"] <= $max_searchPrice);
+            $priceRangeArray = explode(":", $searchPrice);
+            $minSearchPrice = substr($priceRangeArray[0], 1); // remove the currency sign ($)
+            $maxSearchPrice = substr($priceRangeArray[1], 1); // remove the currency sign ($)
+            $matchPrice = ($hotelValue["price"] >= $minSearchPrice && $hotelValue["price"] <= $maxSearchPrice);
         }
-        return $match_price;
+        return $matchPrice;
     }
 
-    private function matchHotelDate($hotel_value, $searchDate): bool {
-        $match_date = true;
+    private function matchHotelDate($hotelValue, $searchDate): bool {
+        $matchDate = true;
         if (!empty($searchDate) && strpos($searchDate, ":") !== false) {
-            $match_date = false;
-            $date_range_array = explode(":", $searchDate);
-            $availability_array = $hotel_value["availability"];
-            foreach ($availability_array as $availability_row) {
-                if (strtotime($date_range_array[0]) >= strtotime($availability_row["from"]) && strtotime($date_range_array[1]) <= strtotime($availability_row["to"])) {
-                    $match_date = true;
+            $matchDate = false;
+            $dateRangeArray = explode(":", $searchDate);
+            $availabilityArray = $hotelValue["availability"];
+            foreach ($availabilityArray as $availabilityRow) {
+                if (strtotime($dateRangeArray[0]) >= strtotime($availabilityRow["from"]) && strtotime($dateRangeArray[1]) <= strtotime($availabilityRow["to"])) {
+                    $matchDate = true;
                     break;
                 }
             }
         }
-        return $match_date;
+        return $matchDate;
     }
 
-    public function searchHotels(array $hotels_array, array $search_params): array {
+    public function searchHotels(array $hotelsArray, array $searchParams): array {
 
-        $searchHotel = $search_params["searchHotel"];
-        $searchCity = $search_params["searchCity"];
-        $searchPrice = $search_params["searchPrice"];
-        $searchDate = $search_params["searchDate"];
+        $searchHotel = $searchParams["searchHotel"];
+        $searchCity = $searchParams["searchCity"];
+        $searchPrice = $searchParams["searchPrice"];
+        $searchDate = $searchParams["searchDate"];
 
-        $filtered_hotels = [];
-        foreach ($hotels_array as $hotel_value) {
-            $match_price = $this->matchHotelPrice($hotel_value, $searchPrice);
-            $match_date = $this->matchHotelDate($hotel_value, $searchDate);
+        $filteredHotels = [];
+        foreach ($hotelsArray as $hotelValue) {
+            $matchPrice = $this->matchHotelPrice($hotelValue, $searchPrice);
+            $matchDate = $this->matchHotelDate($hotelValue, $searchDate);
 
-            $match_hotel = (empty($searchHotel) || (stripos($hotel_value["name"], $searchHotel) !== false));
-            $match_city = (empty($searchCity) || (stripos($hotel_value["city"], $searchCity) !== false));
+            $matchHotel = (empty($searchHotel) || (stripos($hotelValue["name"], $searchHotel) !== false));
+            $matchCity = (empty($searchCity) || (stripos($hotelValue["city"], $searchCity) !== false));
 
 
-            if ($match_hotel && $match_city && $match_price && $match_date)
-                $filtered_hotels[] = $hotel_value;
+            if ($matchHotel && $matchCity && $matchPrice && $matchDate)
+                $filteredHotels[] = $hotelValue;
         }
 
-        return $filtered_hotels;
+        return $filteredHotels;
     }
 
     /**
      * Sort the given array using merge-sort algorithm
      */
-    protected function mergeSort($my_array, $sortKey, $sortDir): array {
-        if (count($my_array) == 1)
-            return $my_array;
-        $mid = count($my_array) / 2;
-        $left = array_slice($my_array, 0, $mid);
-        $right = array_slice($my_array, $mid);
+    protected function mergeSort($myArray, $sortKey, $sortDir): array {
+        if (count($myArray) == 1)
+            return $myArray;
+        $mid = count($myArray) / 2;
+        $left = array_slice($myArray, 0, $mid);
+        $right = array_slice($myArray, $mid);
         $left = $this->mergeSort($left, $sortKey, $sortDir);
         $right = $this->mergeSort($right, $sortKey, $sortDir);
         return $this->merge($left, $right, $sortKey, $sortDir);

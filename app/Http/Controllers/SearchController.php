@@ -24,23 +24,23 @@ class SearchController extends BaseController {
      * @return Response
      */
     public function find(string $searchHotel = null, string $searchCity = null, string $searchPrice = null, string $searchDate = null, string $sortKey = 'hotel', int $sortDir = \App\Hotel::SORT_DIR_ASC): array {
-        $search_params = [
+        $searchParams = [
             "searchHotel" => $searchHotel,
             "searchCity" => $searchCity,
             "searchPrice" => $searchPrice,
             "searchDate" => $searchDate,
         ];
-        $all_params = [
+        $allParams = [
             "sortKey" => $sortKey,
             "sortDir" => $sortDir
-                ] + $search_params;
+                ] + $searchParams;
 
-        if ($this->_hotel->validateParameters($all_params)) {
-            $hotels_json = $this->_hotel->fetchHotels();
+        if ($this->_hotel->validateParameters($allParams)) {
+            $hotelsJson = $this->_hotel->fetchHotels();
 
-            $filtered_hotels = $this->_hotel->searchHotels($hotels_json, $search_params);
-            $sorted_filtered_hotels = $this->_hotel->sortHotels($filtered_hotels, $sortKey, $sortDir);
-            return $this->prepareResponse($sorted_filtered_hotels);
+            $filteredHotels = $this->_hotel->searchHotels($hotelsJson, $searchParams);
+            $sortedFilteredHotels = $this->_hotel->sortHotels($filteredHotels, $sortKey, $sortDir);
+            return $this->prepareResponse($sortedFilteredHotels);
         }
     }
 
