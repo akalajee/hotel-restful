@@ -9,12 +9,12 @@ class SearchTest extends TestCase {
 
     protected $_testMockResponseJsonArray = [];
     protected $_testCasesUriMap = [
-        'testSearchAll' => '/find',
-        'testSearchAllSortByHotelAsc' => '/find/hotel/1',
-        'testSearchByHotelSortByHotelAsc' => '/find/search_hotel/Con/hotel/1',
-        'testSearchByPriceSortByPriceDesc' => '/find/search_price/$80:$100/price/-1',
-        'testSearchByDateSortByHotelDesc' => '/find/search_date/10-10-2020:11-10-2020/hotel/-1',
-        'testSearchByCitySortByHotelAsc' => '/find/search_city/Dubai/hotel/1',
+        'testSearchAll' => '/v1/hotels',
+        'testSearchAllSortByHotelAsc' => '/v1/hotels/hotel/1',
+        'testSearchByHotelSortByHotelAsc' => '/v1/hotels/searchHotel/Con/hotel/1',
+        'testSearchByPriceSortByPriceDesc' => '/v1/hotels/searchPrice/$80:$100/price/-1',
+        'testSearchByDateSortByHotelDesc' => '/v1/hotels/searchDate/10-10-2020:11-10-2020/hotel/-1',
+        'testSearchByCitySortByHotelAsc' => '/v1/hotels/searchCity/Dubai/hotel/1',
     ];
 
     public function setUp() {

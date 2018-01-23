@@ -12,28 +12,28 @@
  */
 
 
-$router->group([], function () use ($router) {
-    $router->get('/find', [
+$router->group(['prefix' => 'v1'], function () use ($router) {
+    $router->get('/hotels', [
         'as' => 'byNone',
         'uses' => 'SearchController@find'
     ]);
-    $router->get('/find/{sort_key}/{sort_dir}', [
+    $router->get('/hotels/{sortKey}/{sortDir}', [
         'as' => 'byNoneSort',
         'uses' => 'SearchController@find'
     ]);
-    $router->get('/find/search_hotel/{search_hotel}/{sort_key}/{sort_dir}', [
+    $router->get('/hotels/searchHotel/{searchHotel}/{sortKey}/{sortDir}', [
         'as' => 'byHotel',
         'uses' => 'SearchController@find'
     ]);
-    $router->get('/find/search_city/{search_city}/{sort_key}/{sort_dir}', [
+    $router->get('/hotels/searchCity/{searchCity}/{sortKey}/{sortDir}', [
         'as' => 'byCity',
         'uses' => 'SearchController@find'
     ]);
-    $router->get('/find/search_price/{search_price}/{sort_key}/{sort_dir}', [
+    $router->get('/hotels/searchPrice/{searchPrice}/{sortKey}/{sortDir}', [
         'as' => 'byPrice',
         'uses' => 'SearchController@find'
     ]);
-    $router->get('/find/search_date/{search_date}/{sort_key}/{sort_dir}', [
+    $router->get('/hotels/searchDate/{searchDate}/{sortKey}/{sortDir}', [
         'as' => 'byDate',
         'uses' => 'SearchController@find'
     ]);
