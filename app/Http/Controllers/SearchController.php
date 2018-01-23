@@ -36,10 +36,9 @@ class SearchController extends BaseController {
                 ] + $searchParams;
 
         if ($this->_hotel->validateParameters($allParams)) {
-            $hotelsJson = $this->_hotel->fetchHotels();
-
-            $filteredHotels = $this->_hotel->searchHotels($hotelsJson, $searchParams);
-            $sortedFilteredHotels = $this->_hotel->sortHotels($filteredHotels, $sortKey, $sortDir);
+            $this->_hotel->fetchHotels();
+            $this->_hotel->filterHotels($searchParams);
+            $sortedFilteredHotels = $this->_hotel->sortHotels($sortKey, $sortDir);
             return $this->prepareResponse($sortedFilteredHotels);
         }
     }

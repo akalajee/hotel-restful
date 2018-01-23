@@ -11,6 +11,7 @@ class Hotel {
      * @var \GuzzleHttp\Client
      */
     protected $_client;
+    protected $_hotels;
 
     const SORT_DIR_ASC = 1;
     const SORT_DIR_DESC = -1;
@@ -100,21 +101,21 @@ class Hotel {
         return true;
     }
 
-    public function fetchHotels(): array {
+    public function fetchHotels(): void {
         $res = $this->_client->get('https://api.myjson.com/bins/tl0bp');
         $hotelsString = $res->getBody();
         $hotelsArray = \GuzzleHttp\json_decode($hotelsString, true);
-        return $hotelsArray["hotels"];
+        $this->_hotels = $hotelsArray["hotels"];
     }
 
-    public function sortHotels(array $hotels, string $sortKey = 'hotel', int $sortDir = self::SORT_DIR_ASC): array {
-        if (count($hotels) < 1)
+    public function sortHotels(string $sortKey = 'hotel', int $sortDir = self::SORT_DIR_ASC): array {
+        if (count($this->_hotels) < 1)
             return [];
         $actualSortKey = $sortKey;
         if (array_key_exists($sortKey, $this->_sortKeyMap)) {
             $actualSortKey = $this->_sortKeyMap[$sortKey];
         }
-        return $this->mergeSort($hotels, $actualSortKey, $sortDir);
+        return $this->_hotels = $this->mergeSort($this->_hotels, $actualSortKey, $sortDir);
     }
 
     private function matchHotelPrice($hotelValue, $searchPrice): bool {
@@ -144,7 +145,7 @@ class Hotel {
         return $matchDate;
     }
 
-    public function searchHotels(array $hotelsArray, array $searchParams): array {
+    public function filterHotels(array $searchParams): array {
 
         $searchHotel = $searchParams["searchHotel"];
         $searchCity = $searchParams["searchCity"];
@@ -152,7 +153,7 @@ class Hotel {
         $searchDate = $searchParams["searchDate"];
 
         $filteredHotels = [];
-        foreach ($hotelsArray as $hotelValue) {
+        foreach ($this->_hotels as $hotelValue) {
             $matchPrice = $this->matchHotelPrice($hotelValue, $searchPrice);
             $matchDate = $this->matchHotelDate($hotelValue, $searchDate);
 
@@ -164,7 +165,7 @@ class Hotel {
                 $filteredHotels[] = $hotelValue;
         }
 
-        return $filteredHotels;
+        return $this->_hotels = $filteredHotels;
     }
 
     /**
@@ -213,6 +214,11 @@ class Hotel {
             $right = array_slice($right, 1);
         }
         return $res;
+    }
+    
+    public function getHotels() : array
+    {
+        return $this->_hotels;
     }
 
 }
