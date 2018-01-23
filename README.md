@@ -45,19 +45,19 @@ php -S localhost:8000 -t public
 After launching the application, the following GET routes are available to query the data:
 
 1. "/v1/hotels" => will return all data as provided from remote 
-2. "/v1/hotels/{sort_key}/{sort_dir}" => will return all data sorted by key ASC or DESC based on sort_dir
-3. "/v1/hotels/search_hotel/{search_hotel}/{sort_key}/{sort_dir}" => will filter data based on hotel name sorted by key ASC or DESC based on sort_dir
-4. "/v1/hotels/search_city/{search_city}/{sort_key}/{sort_dir}" => will filter data based on city name sorted by key ASC or DESC based on sort_dir
-5. "/v1/hotels/search_price/{search_price}/{sort_key}/{sort_dir}" => will filter data based on price range sorted by key ASC or DESC based on sort_dir
-6. "/v1/hotels/search_date/{search_date}/{sort_key}/{sort_dir}" => will filter data based on availabilty date range sorted by key ASC or DESC based on sort_dir
+2. "/v1/hotels/{sortKey}/{sortDir}" => will return all data sorted by key ASC or DESC based on sortDir
+3. "/v1/hotels/searchHotel/{searchHotel}/{sortKey}/{sortDir}" => will filter data based on hotel name sorted by key ASC or DESC based on sortDir
+4. "/v1/hotels/searchCity/{searchCity}/{sortKey}/{sortDir}" => will filter data based on city name sorted by key ASC or DESC based on sortDir
+5. "/v1/hotels/searchPrice/{searchPrice}/{sortKey}/{sortDir}" => will filter data based on price range sorted by key ASC or DESC based on sortDir
+6. "/v1/hotels/searchDate/{searchDate}/{sortKey}/{sortDir}" => will filter data based on availabilty date range sorted by key ASC or DESC based on sortDir
 
 ##### Parameters Rule
-- search_hotel: string
-- search_city: string
-- search_price: '$'+((number) lower_bound_amount):'$'+((number) upper_bound_amount)
-- search_date: lower_bound_date(dd-mm-yyyy):upper_bound_date(dd-mm-yyyy)
-- sort_key: 'hotel' and 'price'
-- sort_dir: 1 for ascending and -1 for descending
+- searchHotel: string
+- searchCity: string
+- searchPrice: '$'+((number) lower_bound_amount):'$'+((number) upper_bound_amount)
+- searchDate: lower_bound_date(dd-mm-yyyy):upper_bound_date(dd-mm-yyyy)
+- sortKey: 'hotel' and 'price'
+- sortDir: 1 for ascending and -1 for descending
 
 ##### Examples
  - 'https://project_url/v1/hotels',
