@@ -42,9 +42,6 @@ class Hotel {
 
     private function validateSearchPrice($searchPrice): void {
         if (!is_null($searchPrice)) {
-            if (strstr($searchPrice, ":") === false) {
-                throw new ParameterException("searchPrice param do not contain ':' Error!!");
-            }
             $price_range_array = explode(":", $searchPrice);
             if (count($price_range_array) < 2) {
                 throw new ParameterException("searchPrice param do not contain upper and lower bound Error!!");
@@ -60,9 +57,6 @@ class Hotel {
 
     private function validateSearchDate($searchDate): void {
         if (!is_null($searchDate)) {
-            if (strstr($searchDate, ":") === false) {
-                throw new ParameterException("searchDate param do not contain ':' Error!!");
-            }
             $date_range_array = explode(":", $searchDate);
             if (count($date_range_array) < 2) {
                 throw new ParameterException("searchDate param do not contain upper and lower bound Error!!");
@@ -146,12 +140,10 @@ class Hotel {
             $match_date = false;
             $date_range_array = explode(":", $searchDate);
             $availability_array = $hotel_value["availability"];
-            if (is_array($availability_array) && count($availability_array) > 0) {
-                foreach ($availability_array as $availability_row) {
-                    if (strtotime($date_range_array[0]) >= strtotime($availability_row["from"]) && strtotime($date_range_array[1]) <= strtotime($availability_row["to"])) {
-                        $match_date = true;
-                        break;
-                    }
+            foreach ($availability_array as $availability_row) {
+                if (strtotime($date_range_array[0]) >= strtotime($availability_row["from"]) && strtotime($date_range_array[1]) <= strtotime($availability_row["to"])) {
+                    $match_date = true;
+                    break;
                 }
             }
         }
