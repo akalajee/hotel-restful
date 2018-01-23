@@ -62,10 +62,10 @@ After launching the application, the following GET routes are available to query
 ##### Examples
  - 'https://project_url/v1/hotels',
  - 'https://project_url/v1/hotels/hotel/1',
- - 'https://project_url/v1/hotels/search_hotel/Con/hotel/1',
- - 'https://project_url/v1/hotels/search_price/$80:$100/price/-1',
- - 'https://project_url/v1/hotels/search_date/10-10-2020:11-10-2020/hotel/-1',
- - 'https://project_url/v1/hotels/search_city/Dubai/hotel/1'
+ - 'https://project_url/v1/hotels/searchHotel/Con/hotel/1',
+ - 'https://project_url/v1/hotels/searchPrice/$80:$100/price/-1',
+ - 'https://project_url/v1/hotels/searchDate/10-10-2020:11-10-2020/hotel/-1',
+ - 'https://project_url/v1/hotels/searchCity/Dubai/hotel/1'
 
 ## Running the tests
 
