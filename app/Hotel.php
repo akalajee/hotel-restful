@@ -29,18 +29,6 @@ class Hotel {
         $this->_client = $client;
     }
 
-    private function validateSearchHotel($searchHotel): void {
-        if (!is_null($searchHotel) && !is_string($searchHotel)) {
-            throw new ParameterException("searchHotel param Error!!");
-        }
-    }
-
-    private function validateSearchCity($searchCity): void {
-        if (!is_null($searchCity) && !is_string($searchCity)) {
-            throw new ParameterException("searchCity param Error!!");
-        }
-    }
-
     private function validateSearchPrice($searchPrice): void {
         if (!is_null($searchPrice)) {
             $priceRangeArray = explode(":", $searchPrice);
@@ -86,14 +74,10 @@ class Hotel {
     }
 
     public function validateParameters($params): bool {
-        $searchHotel = $params["searchHotel"];
-        $searchCity = $params["searchCity"];
         $searchPrice = $params["searchPrice"];
         $searchDate = $params["searchDate"];
         $sortKey = $params["sortKey"];
         $sortDir = $params["sortDir"];
-        $this->validateSearchHotel($searchHotel);
-        $this->validateSearchCity($searchCity);
         $this->validateSearchPrice($searchPrice);
         $this->validateSearchDate($searchDate);
         $this->validateSortKey($sortKey);
